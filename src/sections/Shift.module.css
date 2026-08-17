@@ -98,6 +98,12 @@
   text-align: center;
 }
 
+/* Hard-hidden outside a layer's own beat: a floor under the continuous
+   scroll-driven opacity so nothing can ever bleed through into a later beat. */
+.layerOff {
+  visibility: hidden;
+}
+
 /* beat 01 — the claim */
 
 .title {

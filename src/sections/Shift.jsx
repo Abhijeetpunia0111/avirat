@@ -135,24 +135,27 @@ function Shift() {
   /* 02–03 — the pivot: the old question arrives, is cut, and gives way. */
   const q1Opacity = useTransform(
     scrollYProgress,
-    [Q1_IN[0], Q1_IN[1], Q1_DIM[0], Q1_DIM[1], Q1_OUT[0], Q1_OUT[1]],
-    [0, 1, 1, 0.4, 0.4, 0],
+    [Q1_IN[0], Q1_IN[1], Q1_FADE[0], Q1_FADE[1]],
+    [0, 1, 1, 0],
   )
   const q1Y = useTransform(scrollYProgress, Q1_IN, [64, 0])
   const q1Blur = useTransform(scrollYProgress, Q1_IN, ['blur(18px)', 'blur(0px)'])
-  const q1Scale = useTransform(scrollYProgress, Q1_DIM, [1, 0.5])
+  const q1Scale = useTransform(scrollYProgress, Q1_FADE, [1, 0.5])
   const cut = useTransform(scrollYProgress, Q1_CUT, [0, 1])
 
   const q2Opacity = useTransform(scrollYProgress, Q2_IN, [0, 1])
   const q2Y = useTransform(scrollYProgress, Q2_IN, [56, 0])
   const q2Blur = useTransform(scrollYProgress, Q2_IN, ['blur(20px)', 'blur(0px)'])
 
-  /* 04 — the pivot lifts out of the way and the evidence takes the stage. */
+  /* 04 — the pivot lifts out of the way and the evidence takes the stage,
+     one stat at a time. Each stat then holds — it does not fade back out. */
   const pivotY = useTransform(scrollYProgress, PIVOT_UP, ['0vh', '-19vh'])
   const pivotScale = useTransform(scrollYProgress, PIVOT_UP, [1, 0.44])
-  const statsOpacity = useTransform(scrollYProgress, STATS_IN, [0, 1])
-  const statsY = useTransform(scrollYProgress, STATS_IN, ['13vh', '8vh'])
   const sourceOpacity = useTransform(scrollYProgress, SOURCE_IN, [0, 1])
+
+  /* Only the very end dissolves everything together, as one group. */
+  const groupOpacity = useTransform(scrollYProgress, GROUP_OUT, [1, 0])
+  const groupBlur = useTransform(scrollYProgress, GROUP_OUT, ['blur(0px)', 'blur(10px)'])
 
   /* Small screens and reduced-motion read the whole shift at once, unpinned. */
   if (compact || reduced) {
@@ -208,10 +211,11 @@ function Shift() {
             </div>
           </div>
 
-          <div className={s.center}>
-            {/* 01 — the claim */}
+          <motion.div className={s.center} style={{ opacity: groupOpacity, filter: groupBlur }}>
+            {/* 01 — the claim. Hard-hidden once its own fade is done, so no
+                float-precision leftover can ever show through a later beat. */}
             <motion.div
-              className={s.layer}
+              className={`${s.layer} ${beat !== 0 ? s.layerOff : ''}`}
               style={{
                 opacity: claimOpacity,
                 y: claimY,
@@ -226,8 +230,11 @@ function Shift() {
               </p>
             </motion.div>
 
-            {/* 02–03 — the pivot */}
-            <motion.div className={s.layer} style={{ y: pivotY, scale: pivotScale }}>
+            {/* 02–04 — the pivot, then its shrunken caption sits above the stats */}
+            <motion.div
+              className={`${s.layer} ${beat === 0 ? s.layerOff : ''}`}
+              style={{ y: pivotY, scale: pivotScale }}
+            >
               <motion.p
                 className={`${s.question} ${s.questionFrom}`}
                 style={{ opacity: q1Opacity, y: q1Y, filter: q1Blur, scale: q1Scale }}
@@ -248,18 +255,23 @@ function Shift() {
               </motion.p>
             </motion.div>
 
-            {/* 04 — the evidence */}
-            <motion.div className={s.layer} style={{ opacity: statsOpacity, y: statsY }}>
+            {/* 04 — the evidence: one stat at a time, each holding once shown */}
+            <div className={`${s.layer} ${beat < 3 ? s.layerOff : ''}`}>
               <div className={s.stats}>
                 {STATS.map((stat, i) => (
-                  <ScrollStat key={stat.value} stat={stat} index={i} progress={scrollYProgress} />
+                  <ScrollStat
+                    key={stat.value}
+                    stat={stat}
+                    window={STAT_WINDOWS[i]}
+                    progress={scrollYProgress}
+                  />
                 ))}
               </div>
               <motion.p className={s.source} style={{ opacity: sourceOpacity }}>
                 Source: McKinsey, The State of AI: Global Survey 2025
               </motion.p>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
           <div className={s.stageFoot}>
             <div className="container">
