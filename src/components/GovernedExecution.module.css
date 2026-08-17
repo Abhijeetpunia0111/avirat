@@ -1,0 +1,306 @@
+.section {
+  position: relative;
+  padding-top: clamp(72px, 10vw, 130px);
+  background: var(--bg);
+}
+
+.track {
+  position: relative;
+  height: 460vh;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+/* ---- status bar ---- */
+.statusBar {
+  position: absolute;
+  top: 88px;
+  left: 0;
+  right: 0;
+}
+
+.statusInner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.statusRun,
+.statusState {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+}
+
+.statusState {
+  margin-left: auto;
+  color: var(--ink-soft);
+}
+
+.phases {
+  display: flex;
+  gap: 26px;
+}
+
+/* The phase read-out is a ruled sequence, not a row of pills. */
+.phase {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-bottom: 12px;
+  transition: color 0.45s var(--ease);
+}
+
+.phase::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+
+.phaseDone {
+  color: var(--ink-soft);
+}
+
+.phaseActive {
+  color: var(--ink);
+}
+
+.phaseActive::after {
+  transform: scaleX(1);
+}
+
+/* ---- core + console ---- */
+.coreHolder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -170px;
+  margin-left: -170px;
+  will-change: transform;
+}
+
+.consoleHolder {
+  position: absolute;
+  top: max(160px, 17%);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+
+/* ---- copy panels ---- */
+.panelSlot {
+  position: absolute;
+  top: 168px;
+  width: min(430px, 38vw);
+}
+
+.slotRight {
+  right: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
+}
+
+.slotLeft {
+  left: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
+}
+
+.panel {
+  will-change: transform, opacity;
+}
+
+.panelHead {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.pillar {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-top: 13px;
+  border-top: 1px solid var(--ink);
+  width: fit-content;
+  min-width: 128px;
+}
+
+.claim {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.panelHeading {
+  font-size: var(--text-2xl);
+  line-height: 1.14;
+  margin-bottom: 16px;
+}
+
+.panelBody {
+  font-size: var(--text-sm);
+  line-height: 1.68;
+  color: var(--ink-soft);
+}
+
+.steps {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.steps li {
+  display: flex;
+  gap: 14px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+
+.stepN {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+  padding-top: 3px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.steps b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.steps em {
+  display: block;
+  font-style: normal;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* Live values from the run — the one place mono earns its keep. */
+.readouts {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg-alt);
+  border-left: 1px solid var(--accent);
+}
+
+.readouts li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+}
+
+.readouts svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ---- progress rail ---- */
+.rail {
+  position: absolute;
+  right: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 180px;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.railFill {
+  display: block;
+  width: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* ---- compact layout ---- */
+.compactStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 56px;
+}
+
+.compactConsole {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.compactCore {
+  display: grid;
+  place-items: center;
+  padding-top: 10px;
+}
+
+.compactPanels {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.panelCompact {
+  width: 100%;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 1180px) {
+  .panelSlot {
+    width: 36vw;
+  }
+}
+
+/* Tighter vertical rhythm where the viewport is short. */
+@media (max-height: 820px) {
+  .panelSlot {
+    top: 148px;
+  }
+
+  .steps {
+    gap: 12px;
+  }
+
+  .readouts {
+    margin-top: 18px;
+  }
+}

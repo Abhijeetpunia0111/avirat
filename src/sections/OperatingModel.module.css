@@ -1,0 +1,259 @@
+/* ============ Operating model — dark pinned panel ============
+   The palette tokens are redefined on the section itself, so the shared
+   furniture (.eyebrow, .headline, .subtext) and the SVG diagram — all of which
+   read from var(--ink) / var(--surface) / var(--accent) — invert without any
+   component needing to know it is sitting on a dark ground. */
+
+.section {
+  --ink: #ffffff;
+  --ink-soft: rgba(255, 255, 255, 0.64);
+  --ink-faint: rgba(255, 255, 255, 0.42);
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.26);
+  --surface: rgba(255, 255, 255, 0.04);
+  --accent: #9db6e4;
+  --accent-rgb: 157, 182, 228;
+
+  position: relative;
+  isolation: isolate;
+  background: #202020;
+  color: var(--ink);
+  /* No overflow:hidden here — it would turn the section into a scroll
+     container and stop .stage from sticking. The gradient is clipped by .bg. */
+}
+
+/* ---- ground: drifting gradient + fixed grain ---- */
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg::before {
+  content: '';
+  position: absolute;
+  inset: -35%;
+  background:
+    radial-gradient(38% 46% at 24% 30%, rgba(26, 71, 160, 0.72), transparent 62%),
+    radial-gradient(34% 42% at 76% 68%, rgba(47, 95, 190, 0.5), transparent 64%),
+    radial-gradient(30% 38% at 62% 14%, rgba(120, 150, 210, 0.26), transparent 66%),
+    radial-gradient(40% 44% at 12% 82%, rgba(18, 39, 92, 0.6), transparent 66%);
+  filter: blur(24px);
+  animation: drift 34s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Grain, so the gradient reads as a surface rather than a smooth blend. */
+.bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(-3%, -2%, 0) scale(1.04);
+  }
+  50% {
+    transform: translate3d(4%, 3%, 0) scale(1.13);
+  }
+  100% {
+    transform: translate3d(-2%, 4%, 0) scale(1.06);
+  }
+}
+
+/* ---- pinned track ---- */
+
+.track {
+  position: relative;
+  /* one viewport to read, plus a beat of scroll per pillar */
+  height: calc(100vh + var(--pillar-count, 3) * 78vh);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 76px; /* clears the fixed nav */
+  padding-bottom: 24px;
+}
+
+.stageInner {
+  width: 100%;
+}
+
+.head {
+  margin-bottom: clamp(28px, 5vh, 64px);
+  max-width: 760px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(32px, 5vw, 88px);
+  align-items: center;
+}
+
+.visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.modelSvg {
+  width: 100%;
+  max-width: clamp(240px, 30vh, 360px);
+  height: auto;
+}
+
+/* Diagram type is set here so it tracks the page scale, not the viewBox. */
+.plateName {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  fill: var(--ink);
+  transition: fill 0.45s var(--ease);
+}
+
+.plateNameActive {
+  fill: var(--accent);
+}
+
+.plateCaption {
+  font-family: var(--font-body);
+  font-size: 10px;
+  fill: var(--ink-faint);
+}
+
+.modelCap {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  fill: var(--ink-faint);
+}
+
+/* ---- pillar list ---- */
+
+.pillarList {
+  display: flex;
+  flex-direction: column;
+}
+
+.pillarCard {
+  position: relative;
+  padding: clamp(18px, 2.6vh, 30px) 0 clamp(20px, 2.8vh, 32px);
+  border-top: 1px solid var(--line);
+  cursor: default;
+  opacity: 0.4;
+  transition: opacity 0.55s var(--ease);
+}
+
+.pillarCard::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s var(--ease);
+}
+
+.pillarCardActive {
+  opacity: 1;
+}
+
+.pillarCardActive::before {
+  transform: scaleX(1);
+}
+
+.pillarTop {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.pillarName {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+}
+
+.pillarIndex {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.pillarClaim {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+  transition: color 0.45s var(--ease);
+}
+
+.pillarCardActive .pillarClaim {
+  color: var(--accent);
+}
+
+.pillarText {
+  font-size: var(--text-sm);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  max-width: 48ch;
+}
+
+/* ---- unpinned fallback (compact + reduced motion) ---- */
+
+.static {
+  padding-block: clamp(88px, 11vw, 168px);
+}
+
+.static .pillarCard {
+  opacity: 1;
+}
+
+/* ---- responsive ---- */
+
+@media (max-height: 860px) {
+  .head {
+    margin-bottom: 24px;
+  }
+
+  .head :global(.subtext) {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg::before {
+    animation: none;
+  }
+}

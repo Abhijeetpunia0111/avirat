@@ -1,0 +1,361 @@
+/* ============ shared ============ */
+
+.cardText {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* ============ The Shift ============ */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 34px 32px 8px 0;
+  border-right: 1px solid var(--line);
+}
+
+.stat:last-child {
+  border-right: none;
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  line-height: 0.86;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.statValue span {
+  color: var(--accent);
+}
+
+.statLabel {
+  margin-top: 20px;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 26ch;
+}
+
+.source {
+  margin-top: 28px;
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+/* The question the shift changes — set as type, not as a boxed callout. */
+.pivot {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.pivotFrom {
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.pivotArrow {
+  color: var(--ink-faint);
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.pivotTo {
+  color: var(--ink);
+}
+
+/* ============ Quote ============ */
+
+.quote {
+  max-width: 880px;
+  margin: 0;
+  padding-top: 30px;
+  border-top: 1px solid var(--ink);
+}
+
+.quoteText {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.9vw, 2.3rem);
+  line-height: 1.24;
+  letter-spacing: -0.032em;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+.quoteCite {
+  display: block;
+  margin-top: 26px;
+  font-style: normal;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+/* ============ The Risk ============ */
+
+/* The one dark section on the page. Rather than restyling each element, the ink
+   and line tokens are redefined here — the global .eyebrow, .headline, .subtext
+   and every risk rule below read from them, so the whole section inverts at
+   once and stays in step with any future change to the light palette. */
+.risk {
+  --ink: #ffffff;
+  --ink-soft: rgba(255, 255, 255, 0.82);
+  --ink-faint: rgba(255, 255, 255, 0.72);
+  --line: rgba(255, 255, 255, 0.2);
+  --line-strong: rgba(255, 255, 255, 0.34);
+  /* The brick red vanishes against the blue; a warm coral keeps the hover rule
+     legible without introducing a colour the page doesn't already use. */
+  --risk: #ff9b7d;
+
+  position: relative;
+  color: #fff;
+  /* The artwork peaks at rgb(159,162,255) — white on that raw is 2.31:1, so the
+     scrim is not decorative. Alphas were measured against every pixel: at these
+     stops the worst case on the page is 7.2:1 for headings, 5.5:1 for body copy
+     and 4.5:1 for the faint index labels. Lower them and the section drops below
+     AA. The flat colour underneath is the ground before the image loads. */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(6, 8, 26, 0.58) 0%,
+      rgba(6, 8, 26, 0.5) 46%,
+      rgba(6, 8, 26, 0.56) 100%
+    ),
+    url('../assets/backgorund.png') center / cover no-repeat,
+    #14163a;
+}
+
+.risk ::selection {
+  background: #fff;
+  color: #0a0d12;
+}
+
+.risk :focus-visible {
+  outline-color: #fff;
+}
+
+.riskGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: clamp(28px, 4vw, 64px);
+  row-gap: clamp(32px, 4vw, 56px);
+}
+
+.riskCard {
+  position: relative;
+  height: 100%;
+  padding: 24px 0 8px;
+  border-top: 1px solid var(--line);
+}
+
+.riskGrid > *:nth-child(-n + 3) .riskCard {
+  border-top-color: var(--ink);
+}
+
+.riskIndex {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.riskTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  margin: 16px 0 10px;
+}
+
+.riskText {
+  font-size: var(--text-sm);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  max-width: 34ch;
+}
+
+/* A hairline that draws in on hover, marking the column you are reading. */
+.riskBar {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--risk);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s var(--ease);
+}
+
+.riskCard:hover .riskBar {
+  transform: scaleX(1);
+}
+
+/* ============ Use cases ============ */
+
+.useGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: clamp(24px, 3.4vw, 56px);
+  row-gap: clamp(32px, 4vw, 56px);
+}
+
+.useCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 230px;
+  padding: 24px 0 8px;
+  border-top: 1px solid var(--ink);
+  text-decoration: none;
+}
+
+.useIcon {
+  color: var(--ink-faint);
+  margin-bottom: auto;
+  transition: color 0.45s var(--ease);
+}
+
+.useCard:hover .useIcon {
+  color: var(--accent);
+}
+
+.useTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.useText {
+  font-size: var(--text-sm);
+  line-height: 1.58;
+  color: var(--ink-soft);
+  max-width: 30ch;
+}
+
+.useGo {
+  margin-top: 20px;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+}
+
+.useCard:hover .useGo {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ============ Enterprise readiness ============ */
+
+.proofGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: clamp(28px, 4vw, 64px);
+  row-gap: clamp(32px, 4vw, 56px);
+}
+
+.proof {
+  padding: 24px 0 8px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.proofGrid > *:nth-child(-n + 3).proof {
+  border-top-color: var(--ink);
+}
+
+.proofTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+
+.proofText {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 34ch;
+}
+
+.proofIcon {
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.enterpriseClosing {
+  margin-top: clamp(48px, 6vw, 72px);
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  letter-spacing: -0.028em;
+  line-height: 1.24;
+  color: var(--ink-faint);
+}
+
+.enterpriseClosing b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ============ responsive ============ */
+
+@media (max-width: 1080px) {
+  .useGrid,
+  .proofGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .riskGrid,
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding-right: 0;
+  }
+
+  .stat:last-child {
+    border-bottom: none;
+  }
+
+  .riskCard,
+  .useCard,
+  .proof {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .useGrid,
+  .proofGrid {
+    grid-template-columns: 1fr;
+  }
+}

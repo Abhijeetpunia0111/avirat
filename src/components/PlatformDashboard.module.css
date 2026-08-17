@@ -1,0 +1,351 @@
+/* A light product surface, sized to be cropped by the section it sits in —
+   it should read as a screenshot continuing past the edge, not as a card. */
+
+.dash {
+  position: relative;
+  width: 100%;
+  /* Below this the rows wrap and it stops reading as a screenshot. Beside the
+     copy it holds this width and lets the section crop it instead. */
+  min-width: 700px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 44px 90px -44px rgba(6, 6, 22, 0.72);
+  overflow: hidden;
+}
+
+/* ---- window chrome ---- */
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-alt);
+}
+
+.chromeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.chromeLabel {
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.chromeMeta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 178px minmax(0, 1fr);
+}
+
+/* ---- sidebar ---- */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px 0 30px;
+  border-right: 1px solid var(--line);
+  background: var(--bg-alt);
+}
+
+.sideGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.sideLabel {
+  padding: 0 18px 10px;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.sideItem {
+  padding: 8px 18px;
+  border-left: 2px solid transparent;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.sideItemActive {
+  border-left-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ---- main panel ---- */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: clamp(22px, 2.4vw, 34px);
+}
+
+.mainHead {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.mainTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  letter-spacing: -0.028em;
+  margin: 0;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2.4s var(--ease) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.28; }
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--ink);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 15px 16px 15px 0;
+  border-right: 1px solid var(--line);
+}
+
+.metric:last-child {
+  border-right: none;
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.2vw, 1.95rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.metricLabel {
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+/* ---- the stack, ruled not boxed ---- */
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.layer {
+  display: flex;
+  flex-direction: column;
+}
+
+.layerTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.layer:first-child .layerTitle {
+  margin-top: 0;
+}
+
+.layerTitle::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.rowLabel {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.rowAccent .rowLabel,
+.rowAccent .rowMeta {
+  color: var(--accent);
+}
+
+.rowMeta {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+/* ---- checkpoint queue ---- */
+.queue {
+  display: flex;
+  flex-direction: column;
+}
+
+.queueRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 0;
+  border-top: 1px solid var(--line);
+}
+
+.queueName {
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+
+.queueOwner {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+}
+
+.chip {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.wait {
+  border-color: var(--accent-soft);
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.done {
+  border-color: var(--line-strong);
+  background: var(--bg-alt);
+}
+
+.hold {
+  border-color: rgba(var(--risk-rgb), 0.34);
+  background: var(--risk-wash);
+  color: var(--risk);
+}
+
+@media (max-width: 900px) {
+  .dash {
+    min-width: 0;
+  }
+
+  .body {
+    grid-template-columns: 1fr;
+  }
+
+  .side {
+    flex-direction: row;
+    gap: 0;
+    overflow-x: auto;
+    padding: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sideGroup {
+    flex-direction: row;
+  }
+
+  .sideLabel {
+    display: none;
+  }
+
+  .sideItem {
+    padding: 12px 16px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+
+  .sideItemActive {
+    border-left: none;
+    border-bottom-color: var(--accent);
+  }
+}
+
+@media (max-width: 560px) {
+  .metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .metric:nth-child(2) {
+    border-right: none;
+  }
+
+  .metric:last-child {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--line);
+  }
+
+  .queueOwner {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statusDot {
+    animation: none;
+  }
+}

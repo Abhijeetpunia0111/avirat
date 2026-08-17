@@ -1,0 +1,156 @@
+/* ============ Platform — full-bleed dark band, dashboard cropped at the edge ============ */
+
+.platform {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(620px, 50vw, 900px);
+  padding-block: clamp(80px, 8.5vw, 132px) 0;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* The supplied artwork. The gradient below it is the fallback, so the band
+   still reads as intended if the file is missing. */
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    url('/platform-bg.jpg') center / cover no-repeat,
+    linear-gradient(166deg, #5b57d8 0%, #3f3ac6 30%, #241f4c 68%, #0f0e17 100%);
+}
+
+/* Deepens the left column the copy sits in, and leaves the purple intact on the
+   right where the dashboard sits. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(8, 8, 18, 0) 38%, rgba(8, 8, 18, 0.44) 100%),
+    linear-gradient(90deg, rgba(8, 8, 18, 0.58) 0%, rgba(8, 8, 18, 0.3) 34%, rgba(8, 8, 18, 0) 62%);
+}
+
+.inner {
+  position: relative;
+  width: 100%;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(40px, 5vw, 80px);
+  align-items: end;
+}
+
+.copy {
+  max-width: 560px;
+  padding-bottom: clamp(56px, 6vw, 88px);
+}
+
+.eyebrowLight {
+  color: #fff;
+  border-top-color: rgba(255, 255, 255, 0.55);
+}
+
+.headline {
+  font-size: var(--text-3xl);
+  color: #fff;
+  text-shadow: 0 2px 26px rgba(8, 8, 18, 0.34);
+}
+
+.subtext {
+  margin-top: 22px;
+  font-size: var(--text-lg);
+  line-height: 1.68;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+}
+
+.point {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.point:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.point b {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 500;
+  min-width: 176px;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.point span {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.primary {
+  background: #fff;
+  color: var(--ink);
+}
+
+.primary:hover {
+  background: var(--accent-wash);
+  color: var(--accent-ink);
+}
+
+/* Pushes the dashboard past the container into the right and bottom edges, where
+   the section's overflow crops it. */
+.visual {
+  margin-right: calc(-1 * (var(--gutter) + (100vw - min(100vw, var(--container))) / 2));
+  margin-bottom: calc(-1 * clamp(48px, 6vw, 120px));
+}
+
+@media (max-width: 900px) {
+  .platform {
+    min-height: 0;
+    padding-block: 72px 0;
+  }
+
+  /* Stacked, the copy runs the full width, so the wash has to be even rather
+     than weighted to the left. */
+  .scrim {
+    background: linear-gradient(
+      180deg,
+      rgba(8, 8, 18, 0.56) 0%,
+      rgba(8, 8, 18, 0.42) 46%,
+      rgba(8, 8, 18, 0.56) 100%
+    );
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    gap: clamp(48px, 8vw, 72px);
+  }
+
+  .copy {
+    max-width: none;
+    padding-bottom: 0;
+  }
+
+  .point {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .visual {
+    margin-right: calc(-1 * var(--gutter));
+    margin-bottom: calc(-1 * clamp(28px, 6vw, 48px));
+  }
+}

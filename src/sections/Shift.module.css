@@ -1,0 +1,306 @@
+/* ============ The Shift — pinned pivot ============
+   The stage is the whole viewport, and each beat owns it in turn: the claim,
+   the question that is ending, the question that replaces it, the evidence.
+   Layers are stacked in one centred grid cell and cross-faded, so nothing is
+   animating inside a layout it has to share. */
+
+.section {
+  position: relative;
+  background: var(--bg-alt);
+}
+
+/* ---- pinned track ---- */
+
+.track {
+  position: relative;
+  /* one viewport to read, plus a beat of scroll per move */
+  height: calc(100vh + 340vh);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---- persistent furniture: marker above, rail below ---- */
+
+.stageTop {
+  position: absolute;
+  top: clamp(88px, 11vh, 116px);
+  left: 0;
+  right: 0;
+}
+
+.stageFoot {
+  position: absolute;
+  bottom: clamp(28px, 5vh, 52px);
+  left: 0;
+  right: 0;
+}
+
+.rail {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.railIndex {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.railLabel {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+.railTrack {
+  flex: 1;
+  height: 1px;
+  background: var(--line-strong);
+  position: relative;
+  overflow: hidden;
+}
+
+.railFill {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform-origin: left center;
+}
+
+/* ---- the stacked layers ---- */
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-block: clamp(140px, 18vh, 190px) clamp(96px, 13vh, 130px);
+}
+
+.layer {
+  grid-area: 1 / 1;
+  width: 100%;
+  max-width: var(--container);
+  padding-inline: var(--gutter);
+  text-align: center;
+}
+
+/* beat 01 — the claim */
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 5.2vw, 4.2rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  max-width: 20ch;
+  margin-inline: auto;
+  text-wrap: balance;
+}
+
+.lede {
+  margin: clamp(20px, 3vh, 34px) auto 0;
+  max-width: 58ch;
+  font-size: var(--text-lg);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+/* beats 02–03 — the pivot */
+
+.question {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  font-size: clamp(2rem, 5.6vw, 4.4rem);
+  will-change: transform, filter, opacity;
+}
+
+.questionFrom {
+  margin-bottom: clamp(8px, 1.6vh, 20px);
+}
+
+.questionInner {
+  position: relative;
+  display: inline-block;
+}
+
+/* The cut: drawn left to right as the old question loses its claim. */
+.strike {
+  position: absolute;
+  left: -0.04em;
+  right: -0.04em;
+  top: 56%;
+  height: 3px;
+  background: var(--accent);
+  transform-origin: left center;
+}
+
+/* ---- gradient + grain text fill ----
+   The grain is blended into the gradient before the stack is clipped to the
+   glyphs, so the colour reads as pigment rather than plastic. */
+.fill {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(100deg, #12306f 0%, #1a47a0 24%, #5183da 48%, #1a47a0 72%, #12306f 100%);
+  background-size: 140px 140px, 220% 100%;
+  background-position: 0 0, 0% 50%;
+  background-repeat: repeat, no-repeat;
+  background-blend-mode: overlay, normal;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* The question that still stands keeps its gradient moving. */
+.fillMoving {
+  animation: sweep 9s linear infinite;
+}
+
+@keyframes sweep {
+  from {
+    background-position: 0 0, 0% 50%;
+  }
+  to {
+    background-position: 0 0, 200% 50%;
+  }
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .fill {
+    background-image: none;
+    color: var(--accent);
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* beat 04 — the evidence */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--ink);
+  text-align: left;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(22px, 3.4vh, 38px) 32px 0 0;
+  border-right: 1px solid var(--line);
+  will-change: transform, filter, opacity;
+}
+
+.stat:last-child {
+  border-right: none;
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5.6vw, 4.6rem);
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  line-height: 0.86;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.statValue span {
+  color: var(--accent);
+}
+
+.statLabel {
+  margin-top: clamp(14px, 2.2vh, 22px);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 26ch;
+}
+
+.source {
+  margin-top: clamp(18px, 2.6vh, 30px);
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+  text-align: left;
+}
+
+/* ---- the quote, below the pin ---- */
+
+.after {
+  padding-block: clamp(72px, 9vw, 130px);
+}
+
+/* ---- unpinned fallback (compact + reduced motion) ---- */
+
+.static {
+  padding-block: clamp(88px, 11vw, 168px);
+}
+
+.static .questions {
+  margin-block: clamp(32px, 5vw, 56px);
+}
+
+.static .question {
+  font-size: clamp(1.7rem, 4.6vw, 3rem);
+  text-align: left;
+}
+
+.static .questionFrom {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  opacity: 0.5;
+}
+
+.static .strike {
+  transform: scaleX(1);
+  height: 2px;
+}
+
+/* ---- responsive ---- */
+
+@media (max-height: 820px) {
+  .lede {
+    display: none;
+  }
+
+  .center {
+    padding-block: 120px 88px;
+  }
+}
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    padding: 26px 0 8px;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stat:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fillMoving {
+    animation: none;
+  }
+}
