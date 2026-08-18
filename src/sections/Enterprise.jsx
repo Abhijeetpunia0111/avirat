@@ -38,10 +38,20 @@ function Enterprise() {
   return (
     <section className="section" id="enterprise">
       <div className="container">
-        <Reveal className="section-head section-head--wide">
-          <span className="eyebrow">Enterprise readiness</span>
-          <h2 className="headline">Built for environments where every AI action has to stand up.</h2>
-        </Reveal>
+        <div className={s.enterpriseHead}>
+          <Reveal className="section-head section-head--wide" style={{ marginBottom: 0 }}>
+            <span className="eyebrow">Enterprise readiness</span>
+            <h2 className="headline">Built for environments where every AI action has to stand up.</h2>
+          </Reveal>
+          <Reveal delay={0.08} className={s.enterprisePhotoWrap}>
+            <img
+              className={s.enterprisePhoto}
+              src="/photos/enterprise-team.jpg"
+              alt=""
+              loading="lazy"
+            />
+          </Reveal>
+        </div>
 
         <div className={s.proofGrid}>
           {PROOFS.map((proof, i) => (

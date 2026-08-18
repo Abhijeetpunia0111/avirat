@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import WaveBars from './WaveBars.jsx'
+import Magnetic from './Magnetic.jsx'
 import { EASE } from '../lib/motion.js'
 import styles from './Hero.module.css'
 
@@ -15,6 +15,19 @@ const rise = {
 function Hero() {
   return (
     <section className={styles.hero} id="top">
+      <div className={styles.bg} aria-hidden="true">
+        <video
+          className={styles.bgVideo}
+          src="/large.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+        />
+        <div className={styles.scrim} />
+      </div>
+
       <div className={`container ${styles.inner}`}>
         <motion.span className={styles.label} variants={rise} initial="hidden" animate="show" custom={0}>
           The governed operating layer for enterprise AI
@@ -31,31 +44,17 @@ function Hero() {
         </motion.p>
 
         <motion.div className={styles.ctas} variants={rise} initial="hidden" animate="show" custom={3}>
-          <a href="#get-started" className="btn btn-primary">
+          <Magnetic href="#get-started" className="btn btn-primary">
             Book an AI execution assessment
             <svg className="btn-arrow" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
               <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </a>
-          <a href="#how-it-works" className="btn btn-secondary">
+          </Magnetic>
+          <Magnetic href="#how-it-works" className="btn btn-secondary">
             See governed execution in action
-          </a>
+          </Magnetic>
         </motion.div>
       </div>
-
-      <motion.div
-        className={styles.horizon}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 0.5, ease: EASE }}
-      >
-        <div className={`container ${styles.horizonHead}`}>
-          <span>Every run: context, policy, approval, execution, evidence.</span>
-        </div>
-        <div className={styles.waveHolder}>
-          <WaveBars count={104} />
-        </div>
-      </motion.div>
     </section>
   )
 }

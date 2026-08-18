@@ -1,4 +1,11 @@
 .hero {
+  --ink: #ffffff;
+  --ink-soft: rgba(255, 255, 255, 0.82);
+  --ink-faint: rgba(255, 255, 255, 0.68);
+  --line: rgba(255, 255, 255, 0.28);
+  --line-strong: rgba(255, 255, 255, 0.4);
+  --accent: #9db6e4;
+
   position: relative;
   min-height: 100vh;
   display: flex;
@@ -6,6 +13,34 @@
   justify-content: center;
   padding-top: 128px;
   overflow: hidden;
+  color: var(--ink);
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bgVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(4, 6, 10, 0.86) 0%,
+    rgba(4, 6, 10, 0.68) 30%,
+    rgba(4, 6, 10, 0.32) 52%,
+    rgba(4, 6, 10, 0) 72%
+  );
 }
 
 .inner {
@@ -15,6 +50,7 @@
   flex-direction: column;
   align-items: flex-start;
   padding-bottom: clamp(72px, 11vw, 150px);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .label {
@@ -57,36 +93,18 @@
   margin-top: 42px;
 }
 
-/* ---- horizon band ---- */
-.horizon {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  pointer-events: none;
+.ctas :global(.btn-primary) {
+  background: #fff;
+  color: #0a0d12;
 }
 
-.horizonHead {
-  padding-bottom: 16px;
+.ctas :global(.btn-primary:hover) {
+  background: var(--accent);
+  color: #fff;
 }
 
-.horizonHead span {
-  display: block;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--line);
-  font-size: var(--text-sm);
-  color: var(--ink-faint);
-}
-
-.waveHolder {
-  height: clamp(96px, 14vh, 158px);
-  padding-inline: var(--gutter);
-  width: 100%;
-  max-width: var(--container);
-  margin-inline: auto;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+.ctas :global(.btn-secondary:hover) {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 @media (max-width: 720px) {
@@ -97,10 +115,5 @@
 
   .inner {
     padding-bottom: 48px;
-  }
-
-  .horizon {
-    position: relative;
-    margin-top: 8px;
   }
 }

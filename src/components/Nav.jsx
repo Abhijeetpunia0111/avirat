@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Magnetic from './Magnetic.jsx'
 import styles from './Nav.module.css'
 
 const LINKS = [
@@ -32,13 +33,15 @@ function Nav() {
 
         <nav className={styles.links} aria-label="Primary">
           {LINKS.map((link) => (
-            <a key={link.href} href={link.href}>{link.label}</a>
+            <Magnetic key={link.href} href={link.href} strength={0.45}>
+              {link.label}
+            </Magnetic>
           ))}
         </nav>
 
-        <a href="#get-started" className={`btn btn-primary ${styles.navCta}`}>
+        <Magnetic href="#get-started" className={`btn btn-primary ${styles.navCta}`}>
           Book an assessment
-        </a>
+        </Magnetic>
       </div>
     </header>
   )

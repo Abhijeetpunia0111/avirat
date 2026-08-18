@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Magnetic from './Magnetic.jsx'
 import styles from './Footer.module.css'
 
 const COLUMNS = [
@@ -110,11 +111,11 @@ function Footer() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
             />
-            <button className={styles.submit} type="submit" aria-label="Subscribe">
+            <Magnetic as="button" strength={0.5} className={styles.submit} type="submit" aria-label="Subscribe">
               <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
                 <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </button>
+            </Magnetic>
           </form>
 
           <p className={styles.formNote} role="status">
@@ -136,7 +137,9 @@ function Footer() {
               <ul>
                 {column.links.map((link, i) => (
                   <li key={`${link.label}-${i}`}>
-                    <a href={link.href}>{link.label}</a>
+                    <Magnetic href={link.href} strength={0.5}>
+                      {link.label}
+                    </Magnetic>
                   </li>
                 ))}
               </ul>
@@ -152,9 +155,10 @@ function Footer() {
 
         <div className={styles.social}>
           {SOCIAL.map((item) => (
-            <a
+            <Magnetic
               key={item.label}
               href={item.href}
+              strength={0.55}
               aria-label={item.label}
               target={item.href.startsWith('http') ? '_blank' : undefined}
               rel={item.href.startsWith('http') ? 'noreferrer noopener' : undefined}
@@ -162,7 +166,7 @@ function Footer() {
               <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
                 <path d={item.path} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </a>
+            </Magnetic>
           ))}
         </div>
       </div>

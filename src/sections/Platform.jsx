@@ -1,3 +1,4 @@
+import Magnetic from '../components/Magnetic.jsx'
 import PlatformDashboard from '../components/PlatformDashboard.jsx'
 import Reveal from '../components/Reveal.jsx'
 import s from './Platform.module.css'
@@ -47,12 +48,12 @@ function Platform() {
 
             <Reveal delay={0.1}>
               <div className="cta-row">
-                <a href="#get-started" className={`btn ${s.primary}`}>
+                <Magnetic href="#get-started" className={`btn ${s.primary}`}>
                   Explore the platform
                   <svg className="btn-arrow" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
                     <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </a>
+                </Magnetic>
               </div>
             </Reveal>
           </div>
